@@ -1,11 +1,12 @@
 import { useState } from "react"
+import Footer from "../components/Footer"
 
 const Home = () => {
   const [categories] = useState([
     { name: "Gaming Rig", img: "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?q=80&w=800" },
     { name: "Audio", img: "https://images.unsplash.com/photo-1545127398-14699f92334b?q=80&w=800" },
-    { name: "Wearables", img: "https://images.unsplash.com/photo-1508685096489-7cab943bd152?q=80&w=800" },
-    { name: "Accessories", img: "https://images.unsplash.com/photo-1596464530060-66444855483a?q=80&w=800" }
+    { name: "Wearables", img: "https://images.pexels.com/photos/437037/pexels-photo-437037.jpeg?q=80&w=800" },
+     { name: "Accessories", img: "https://images.pexels.com/photos/4526407/pexels-photo-4526407.jpeg?q=80&w=800" }
   ])
 
   return (
@@ -66,6 +67,8 @@ const Home = () => {
         <p className="text-neutral-500">Discover our silent-cooling series.</p>
       </section>
       
+
+   <Footer/>
     </div>
   )
 }

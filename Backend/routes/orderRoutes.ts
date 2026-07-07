@@ -13,6 +13,4 @@ router.put("/update-details/:id", authenticate, updateOrderDetails);
 router.get("/:id/invoice", authenticate, downloadInvoice);
 router.get("/all-orders", authenticate, requireRole([UserRole.ADMIN]), getAllOrders);
 
-
-
 export default router; 

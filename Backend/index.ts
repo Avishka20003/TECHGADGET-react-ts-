@@ -16,7 +16,7 @@ const MONGO_URL = process.env.MONGO_URL || ""
 app.use(express.json());
 app.use(cors())
 
-app.use("/api/v1/gadgets", gadgetRoutes);
+app.use("/api/gadgets", gadgetRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/orders", orderRoutes);
 app.use("/api/v1/admin", adminRoutes)

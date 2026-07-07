@@ -2,7 +2,7 @@ import mongoose, { Schema, Document } from "mongoose";
 
 interface IOrderItem {
   gadgetId: mongoose.Types.ObjectId; 
-  name : string;
+  name: string;
   quantity: number;
   price: number;
 }
@@ -30,7 +30,7 @@ const OrderSchema: Schema = new Schema(
     userId: { 
       type: Schema.Types.ObjectId, 
       ref: "User", 
-      required: [true, "User ID is required!"] // error message එකත් නිවැරදි කළා
+      required: [true, "User ID is required!"]
     }, 
 
     customerName: { 

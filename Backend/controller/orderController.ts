@@ -148,7 +148,6 @@ export const updateOrderDetails = async (req: AuthRequest, res: Response) => {
 export const downloadInvoice = async (req: Request, res: Response) => {
   try {
     const orderId = req.params.id;
-
     const order = await OrderModel.findById(orderId).populate("items.gadgetId");
 
     if (!order) {
@@ -156,47 +155,45 @@ export const downloadInvoice = async (req: Request, res: Response) => {
     }
 
     res.setHeader("Content-Type", "application/pdf");
-    res.setHeader(
-      "Content-Disposition",
-      `attachment; filename=Invoice-${order.invoiceNumber}.pdf`
-    );
+    res.setHeader("Content-Disposition", `attachment; filename=Invoice-${order.invoiceNumber}.pdf`);
 
     const doc = new PDFDocument({ margin: 50 });
     doc.pipe(res);
 
-    doc.fillColor("#1b5e20").fontSize(28).text("TechGadget Store", 50, 50, { bold: true }); 
-    doc.fillColor("#666666").fontSize(10).text("The Ultimate Gadget Store", 50, 85);
+    doc.fillColor("#000000").fontSize(30).text("TECHGADGET", 50, 50, { bold: true }); 
+    doc.fillColor("#666666").fontSize(10).text("INDUSTRIAL HARDWARE DIVISION", 50, 85);
     
-    doc.fillColor("#333333").fontSize(11).text(`Invoice No: ${order.invoiceNumber}`, 350, 55, { align: "right" });
-    doc.text(`Date: ${new Date(order.createdAt).toLocaleDateString()}`, 350, 70, { align: "right" });
-    doc.text(`Status: ${order.status.toUpperCase()}`, 350, 85, { align: "right" });
+    doc.fillColor("#000000").fontSize(11).text(`INVOICE_NO: ${order.invoiceNumber}`, 350, 55, { align: "right" });
+    doc.text(`DATE: ${new Date(order.createdAt).toLocaleDateString()}`, 350, 70, { align: "right" });
+    doc.text(`STATUS: ${order.status.toUpperCase()}`, 350, 85, { align: "right" });
 
-    doc.moveTo(50, 110).lineTo(550, 110).strokeColor("#e0e0e0").stroke();
+    doc.moveTo(50, 110).lineTo(550, 110).strokeColor("#dc2626").lineWidth(2).stroke();
 
-    doc.fillColor("#1b5e20").fontSize(12).text("BILL TO:", 50, 130, { bold: true });
-    doc.fillColor("#424242").fontSize(10);
-    doc.text(`Name      : ${order.customerName}`, 50, 150);
-    doc.text(`Address   : ${order.shippingAddress}`, 50, 165);
-    doc.text(`Phone     : ${order.phone}`, 50, 180);
+    doc.fillColor("#dc2626").fontSize(12).text("BILL_TO:", 50, 130, { bold: true });
+    doc.fillColor("#000000").fontSize(10);
+    doc.text(`NAME    : ${order.customerName}`, 50, 150);
+    doc.text(`ADDRESS : ${order.shippingAddress}`, 50, 165);
+    doc.text(`PHONE   : ${order.phone}`, 50, 180);
 
     let currentY = 220;
 
-    doc.rect(50, currentY, 500, 25).fill("#1b5e20");
+    doc.rect(50, currentY, 500, 25).fill("#dc2626");
     
-    doc.fillColor("#ffffff").fontSize(10);
-    doc.text("Item Name", 60, currentY + 7, { width: 250 });
-    doc.text("Qty", 320, currentY + 7, { width: 50, align: "center" });
-    doc.text("Unit Price", 390, currentY + 7, { width: 70, align: "right" });
-    doc.text("Total (LKR)", 470, currentY + 7, { width: 70, align: "right" });
+    doc.fillColor("#ffffff").fontSize(10).font('Helvetica-Bold');
+    doc.text("ITEM_DESCRIPTION", 60, currentY + 7, { width: 250 });
+    doc.text("QTY", 320, currentY + 7, { width: 50, align: "center" });
+    doc.text("PRICE", 390, currentY + 7, { width: 70, align: "right" });
+    doc.text("TOTAL", 470, currentY + 7, { width: 70, align: "right" });
 
     currentY += 25; 
+    doc.font('Helvetica'); 
 
     order.items.forEach((item: any, index: number) => {
       if (index % 2 === 0) {
-        doc.rect(50, currentY, 500, 22).fill("#f9f9f9");
+        doc.rect(50, currentY, 500, 22).fill("#f0f0f0");
       }
 
-      doc.fillColor("#424242").fontSize(10);
+      doc.fillColor("#000000").fontSize(10);
       doc.text(item.name, 60, currentY + 6, { width: 250 });
       doc.text(item.quantity.toString(), 320, currentY + 6, { width: 50, align: "center" });
       doc.text(`Rs. ${item.price}.00`, 390, currentY + 6, { width: 70, align: "right" });
@@ -205,26 +202,26 @@ export const downloadInvoice = async (req: Request, res: Response) => {
       currentY += 22;
     });
 
-    doc.moveTo(50, currentY).lineTo(550, currentY).strokeColor("#1b5e20").stroke();
+    doc.moveTo(50, currentY).lineTo(550, currentY).strokeColor("#dc2626").stroke();
     currentY += 15;
 
-    doc.fillColor("#1b5e20").fontSize(14).text(
-      `Grand Total: LKR ${order.totalAmount}.00`, 
+    doc.fillColor("#dc2626").fontSize(14).font('Helvetica-Bold').text(
+      `GRAND_TOTAL: LKR ${order.totalAmount}.00`, 
       300, 
       currentY, 
-      { width: 250, align: "right", bold: true }
+      { width: 250, align: "right" }
     );
 
-    doc.moveTo(50, 700).lineTo(550, 700).strokeColor("#e0e0e0").stroke();
-    doc.fillColor("#9e9e9e").fontSize(9).text(
-      "Thank you for shopping with TechGadget! Come back soon.", 
+  
+    doc.moveTo(50, 700).lineTo(550, 700).strokeColor("#000000").stroke();
+    doc.fillColor("#666666").fontSize(9).font('Helvetica').text(
+      "SYSTEM_GENERATED_DOCUMENT | TECHGADGET_SECURE_TRANSACTION", 
       50, 
       715, 
       { align: "center" }
     );
 
     doc.end();
-
   } catch (error: any) {
     console.error(error);
     res.status(500).json({ message: "Failed to generate invoice PDF", error: error.message });
